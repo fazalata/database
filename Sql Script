@@ -1,0 +1,161 @@
+DROP SCHEMA IF EXISTS Matoppskrifter;
+CREATE SCHEMA IF NOT EXISTS Matoppskrifter;
+USE Matoppskrifter;
+
+DROP TABLE IF EXISTS allergenIIngrediens;
+DROP TABLE IF EXISTS allergenIMatrett;
+DROP TABLE IF EXISTS allergen;
+DROP TABLE IF EXISTS ingrediensmengde;
+DROP TABLE IF EXISTS ingrediens;
+DROP TABLE IF EXISTS matrett;
+
+-- Tables
+CREATE TABLE matrett (
+	matrettID INT(12) NOT NULL UNIQUE AUTO_INCREMENT,
+    navn CHAR(36) DEFAULT 'Ukjent',
+    forberedelsestid INT(36),
+    steketid INT(36),
+    PRIMARY KEY (matrettID));
+    
+CREATE TABLE ingrediens (
+	ingrediensID INT(12) NOT NULL UNIQUE AUTO_INCREMENT,
+    navn CHAR(36) NOT NULL,
+    PRIMARY KEY (ingrediensID));
+    
+CREATE TABLE ingrediensmengde (
+	ingrediensID INT(12),
+    matrettID INT(12),
+    mengde DOUBLE,
+    maaleenhet CHAR(36),
+    PRIMARY KEY (ingrediensID, matrettID),
+    FOREIGN KEY (ingrediensID) REFERENCES ingrediens(ingrediensID),
+    FOREIGN KEY (matrettID) REFERENCES matrett(matrettID));
+    
+CREATE TABLE allergen (
+	allergenID INT(12) NOT NULL UNIQUE AUTO_INCREMENT,
+    navn CHAR(36) NOT NULL,
+    PRIMARY KEY (allergenID));
+    
+CREATE TABLE allergenIMatrett (
+	allergenID INT(12),
+    matrettID INT(12),
+    PRIMARY KEY (allergenID, matrettID),
+    FOREIGN KEY (allergenID) REFERENCES allergen(allergenID),
+    FOREIGN KEY (matrettID) REFERENCES matrett(matrettID));
+    
+CREATE TABLE allergenIIngrediens (
+	ingrediensID INT(12),
+    allergenID INT(12),
+    PRIMARY KEY (ingrediensID, allergenID),
+    FOREIGN KEY (ingrediensID) REFERENCES ingrediens(ingrediensID),
+    FOREIGN KEY (allergenID) REFERENCES allergen(allergenID));
+     
+
+-- Inserts
+INSERT INTO allergen (navn)
+VALUES
+	('Sitrus'),
+    ('Egg'),
+    ('Gluten'),
+    ('Laktose'),
+    ('Nøtter'),
+    ('Vegansk alternativ'),
+    ('Sterkt');
+
+INSERT INTO matrett (navn, forberedelsestid, steketid)
+VALUES
+	('Palak', 20, 30),
+    ('Biryani', 30, 45);
+    
+INSERT INTO ingrediens (navn)
+VALUES
+	('Poteter'),
+    ('hvitløksfedd'),
+    ('chilipulver'),
+    ('ingefær'),
+    ('gurkemeie'),
+    ('kumin'),
+    ('tomater'),
+    ('yoghurt'),
+    ('kardemomme'),
+    ('kanel'),
+    ('kylling'),
+    ('ris'),
+    ('nellikspiker'),
+    ('safran'),
+    ('vann'),
+    ('kyllingkraft'),
+    ('salt'),
+    ('pepper'),
+    ('olje'),
+    ('chili'),
+    ('spinat'),
+    ('fløte'),
+    ('pinjekjerner'),
+    ('garam masala'),
+    ('spisskummen'),
+    ('løk');
+    
+INSERT INTO ingrediensmengde (ingrediensID, matrettID, mengde, maaleenhet)
+VALUES
+	(26, 1, 1, 'stk'),
+    (20, 1, 2, 'stk'),
+    (2, 1, 4, 'stk'),
+    (21, 1, 300, 'gram'),
+    (22, 1, 3, 'dl'),
+    (23, 1, 70, 'gram'),
+    (1, 1, 4, 'stk'),
+    (5, 1, 2, 'ts'),
+    (24, 1, 2, 'ts'),
+    (25, 1, 2, 'ts'),
+    (17, 1, 2, 'ts'),
+    (1, 2, 5, 'stk'),
+    (26, 2, 3, 'stk'),
+    (2, 2, 2, 'stk'),
+    (3, 2, 0.5, 'ts'),
+    (4, 2, 4, 'cm'),
+    (5, 2, 0.5, 'ts'),
+    (6, 2, 1, 'ts'),
+    (7, 2, 3, 'stk'),
+    (8, 2, 2, 'Ss'),
+    (9, 2, 0.5, 'ts'),
+    (10, 2, 1, 'ts'),
+    (11, 2, 1, 'stk'),
+    (13, 2, 2, 'stk'),
+    (14, 2, 1, 'klype'),
+    (12, 2, 500, 'gram'),
+    (16, 2, 3, 'Ss'),
+    (17, 2, 1, 'ts'),
+    (18, 2, 1, 'ts');
+
+INSERT INTO allergenIIngrediens (ingrediensID, allergenID)
+VALUES
+	(1, 6),
+    (2, 6),
+    (3, 6),
+    (3, 7),
+    (4, 6),
+    (5, 6),
+    (6, 6),
+    (7, 6),
+    (8, 4),
+    (9, 6),
+    (10, 6),
+    (12, 6),
+    (13, 6),
+    (14, 6),
+    (15, 6),
+    (16, 3),
+    (17, 6),
+    (18, 6),
+    (19, 6),
+    (20, 6),
+    (20, 7),
+    (21, 6),
+    (22, 4),
+    (23, 6),
+    (24, 6),
+    (24, 7),
+    (25, 6),
+    (26, 6);
+    
